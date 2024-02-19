@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+import models
 import shlex
 
 
@@ -53,6 +54,24 @@ class HBNBCommand(cmd.Cmd):
                             continue
                 new_dict[key] = value
         return new_dict
+
+    def do_all(self, arg):
+        """ Shows all objects, or all objects of a class"""
+        args = shlex.split(arg)
+        obj_list = []
+        if len(args) == 0:
+            obj_dict = models.storage.all()
+        elif args[0] in self.classes:
+            obj_dict = models.storage.all(self.classes[args[0]])
+        else:
+            print("** class doesn't exist **")
+            return False
+        for key in obj_dict:
+            obj_list.append(str(obj_dict[key]))
+        print("[", end="")
+        print(", ".join(obj_list), end="")
+        print("]")
+
 
     def do_create(self, arg):
         """Creates a new instance of a class"""
@@ -161,23 +180,6 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the destroy command """
         print("Destroys an individual instance of a class")
         print("[Usage]: destroy <className> <objectId>\n")
-
-    def do_all(self, parsed):
-        """ Shows all objects, or all objects of a class"""
-        print_list = []
-        if parsed:
-            parsed = parsed.split(' ')[0]  # remove possible trailing parsed
-            if parsed not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
-            for k, v in storage.all().items():
-                if k.split('.')[0] == parsed:
-                    print_list.append(str(v))
-        else:
-            for k, v in storage.all().items():
-                print_list.append(str(v))
-
-        print(print_list)
 
 
         if parsed:
