@@ -5,7 +5,7 @@ from sqlalchemy import Column, String
 import os
 
 
-class User(BaseModel):
+class User(BaseModel, Base):
     """This class defines a user by various attributes"""
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = 'users'
@@ -18,6 +18,3 @@ class User(BaseModel):
         password = ""
         first_name = ""
         last_name = ""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
