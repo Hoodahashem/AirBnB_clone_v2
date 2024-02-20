@@ -61,3 +61,8 @@ class FileStorage:
             key = obj.__class__.__name__ + '.' + obj.id
             if key in self.all().keys():
                 del self.all()[key]
+
+    def close(self):
+        """deserlizing the json file to objects"""
+        self.reload()
+
