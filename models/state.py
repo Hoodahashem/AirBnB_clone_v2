@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship
 from models.city import City
 from os import getenv
 
+
 class State(BaseModel, Base):
     """ State class """
     if models.storage_t == "db":

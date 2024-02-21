@@ -34,7 +34,7 @@ class DBStorage:
         classes = [State, City, User, Place, Review, Amenity]
         objs = {}
         if cls:
-            if type(cls) == str:
+            if type(cls) is str:
                 cls = eval(cls)
             for obj in self.__session.query(cls).all():
                 objs[obj.__class__.__name__ + '.' + obj.id] = obj

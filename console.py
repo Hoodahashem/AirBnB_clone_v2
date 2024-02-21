@@ -17,9 +17,6 @@ import shlex
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
-    # determines prompt for interactive/non-interactive modes
-    prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
-
     classes = {
                'BaseModel': BaseModel, 'User': User, 'Place': Place,
                'State': State, 'City': City, 'Amenity': Amenity,
@@ -32,7 +29,6 @@ class HBNBCommand(cmd.Cmd):
              'latitude': float, 'longitude': float
             }
     prompt = '(hbnb) '
-
 
     def parser(self, parsed):
         """creates a dictionary from a list of strings"""
@@ -47,10 +43,10 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     try:
                         value = int(value)
-                    except:
+                    except ValueError:
                         try:
                             value = float(value)
-                        except:
+                        except ValueError:
                             continue
                 new_dict[key] = value
         return new_dict
@@ -72,7 +68,6 @@ class HBNBCommand(cmd.Cmd):
         print(", ".join(obj_list), end="")
         print("]")
 
-
     def do_create(self, arg):
         """Creates a new instance of a class"""
         parsed = arg.split()
@@ -87,7 +82,6 @@ class HBNBCommand(cmd.Cmd):
             return False
         print(instance.id)
         instance.save()
-
 
     def do_quit(self, command):
         """ Method to exit the HBNB console"""
@@ -171,7 +165,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -180,7 +174,6 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the destroy command """
         print("Destroys an individual instance of a class")
         print("[Usage]: destroy <className> <objectId>\n")
-
 
         if parsed:
             parsed = parsed.split(' ')[0]  # remove possible trailing parsed
@@ -245,15 +238,16 @@ class HBNBCommand(cmd.Cmd):
             return
 
         # first determine if kwparsed or parsed
-        if '{' in parsed[2] and '}' in parsed[2] and type(eval(parsed[2])) is dict:
+        if '{' in parsed[2] and '}' in parsed[2] and \
+                isinstance(eval(parsed[2]), dict):
             kwparsed = eval(parsed[2])
-            parsed = []  # reformat kwparsed into list, ex: [<name>, <value>, ...]
+            parsed = []
             for k, v in kwparsed.items():
                 parsed.append(k)
                 parsed.append(v)
         else:  # isolate parsed
             parsed = parsed[2]
-            if parsed and parsed[0] == '\"':  # check for quoted arg
+            if parsed and parsed[0] == '\"':
                 second_quote = parsed.find('\"', 1)
                 att_name = parsed[1:second_quote]
                 parsed = parsed[second_quote + 1:]
@@ -300,6 +294,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
