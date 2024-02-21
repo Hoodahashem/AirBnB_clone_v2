@@ -68,42 +68,10 @@ class DBStorage:
         """reloads data from the database"""
         Base.metadata.create_all(self.__engine)
         sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        rint(f"Queried {clss}: {objs}")  # Debugging line
         Session = scoped_session(sess_factory)
         self.__session = Session
 
     def close(self):
         """call remove() method on the private session attribute"""
         self.__session.remove()
-
-    def get(self, cls, id):
-        """method to retrieve one object"""
-
-        all_objs = self.all()
-
-        try:
-            if (isinstance(cls, str)):
-                key = cls + "." + id
-
-            else:
-                key = cls.__name__ + "." + id
-
-            obj = all_objs[key]
-            return obj
-
-        except:
-            return None
-
-    def count(self, cls=None):
-        """method to count the number of objects in storage"""
-        count = 0
-
-        if cls is None:
-            all_objs = self.all()
-            return len(all_objs.keys())
-
-        else:
-            if (isinstance(cls, str)):
-                fil_recs = self.__session.query(eval(cls)).all()
-            else:
-                fil_recs = self.__session.query(cls).all()
-                return len(fil_recs)
