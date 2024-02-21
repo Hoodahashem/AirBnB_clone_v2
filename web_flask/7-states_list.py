@@ -7,6 +7,7 @@ from flask import Flask, render_template
 from models import *
 from models import storage
 app = Flask(__name__)
+from models.state import State
 
 
 @app.teardown_appcontext
@@ -17,10 +18,10 @@ def teardown_db(error):
 
 @app.route('/states_list', strict_slashes=False)
 def states_list():
-    """display a HTML page with the states listed in alphabetical order"""
-    states = sorted(list(storage.all("State").values()), key=lambda x: x.name)
+    """ displays a HTML page with a list of states """
+    states = storage.all(State).values()
+    states = sorted(states, key=lambda k: k.name)
     return render_template('7-states_list.html', states=states)
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='5000')
