@@ -15,6 +15,7 @@ def states_list():
     states = sorted(states, key=lambda k: k.name)
     return render_template('7-states_list.html', states=states)
 
+
 @app.teardown_appcontext
 def close_session(exception):
     """Close the current SQLAlchemy session"""
