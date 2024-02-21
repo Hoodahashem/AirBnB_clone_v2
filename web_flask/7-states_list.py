@@ -2,7 +2,7 @@
 """Start a Flask web application"""
 from flask import Flask, render_template
 from models import storage
-from models import *
+from models.state import State
 
 
 app = Flask(__name__)
@@ -11,9 +11,9 @@ app = Flask(__name__)
 @app.route('/states_list', strict_slashes=False)
 def states_list():
     """Display an HTML page with a list of all the states"""
-    states = sorted(list(storage.all("State").values()), key=lambda x: x.name)
+    states = storage.all(State).values()
+    states = sorted(states, key=lambda k: k.name)
     return render_template('7-states_list.html', states=states)
-
 
 @app.teardown_appcontext
 def close_session(exception):
