@@ -66,11 +66,13 @@ class DBStorage:
 
     def reload(self):
         """reloads data from the database"""
+        print(f"Engine before initialization: {self.__engine}")  # Debugging line
         Base.metadata.create_all(self.__engine)
         sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        print(f"Queried {clss}: {objs}")  # Debugging line
         Session = scoped_session(sess_factory)
         self.__session = Session
+        print(f"Engine after initialization: {self.__engine}")  # Debugging line
+        print(f"Session after initialization: {self.__session}")  # Debugging line
 
     def close(self):
         """call remove() method on the private session attribute"""
